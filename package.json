@@ -4,12 +4,17 @@
   "description": "tinder for devs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev":"nodemon src/app.js",
+    "start":"node src/app.js"
   },
   "keywords": [
     "nodejs",
     "javascript"
   ],
   "author": "kishan Kumar",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
 }
