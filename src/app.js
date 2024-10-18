@@ -2,20 +2,20 @@ const express = require("express");
 
 const app = express();
 
-app.use('/test',(req,res)=>{
-    res.send('Hello testing testing')
+app.get('/test',(req,res)=>{
+    res.send({name:"kishan",age:"28"})
 });
 
-app.use('/hello/2',(req,res)=>{
+app.post('/hello',(req,res)=>{
     res.send('Hello my second bro')
 });
 
-app.use('/hello',(req,res)=>{
-    res.send('Hello to express js')
+app.patch('/test',(req,res)=>{
+    res.send({name:"kk",Age:"28"})
 });
 
-app.use('/',(req,res)=>{
-    res.send('Hello server')
+app.delete('/',(req,res)=>{
+    res.send('Data deleted Successfully')
 });
 app.listen((3333),()=>{
     console.log("Connect to server");
