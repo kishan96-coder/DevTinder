@@ -9,3 +9,6 @@
 - What are dependencies 
 - what is the use of "-g" while npm install 
 - Difference between caret and tilde ( ^ vs ~)
+
+- What is a Middleware
+- How express Js basically handles requests  behind the scenes 
