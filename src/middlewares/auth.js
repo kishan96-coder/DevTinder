@@ -17,7 +17,7 @@ const Authorize = AutherizeToken==="authorize123";
 const userAuth = (req,res,next)=>{
     const AutherizeToken= "authorize123";
     
-    const Authorize = AutherizeToken==="authorize12";
+    const Authorize = AutherizeToken==="authorize123";
     
         if(Authorize ){
             console.log("Authorized User");
@@ -28,9 +28,6 @@ const userAuth = (req,res,next)=>{
     }
     
     
-
-
-
 module.exports = {
     adminAuth,
     userAuth
