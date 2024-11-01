@@ -20,3 +20,27 @@
 - Call the connectDB function and connect to the database before starting application on 7777 
 
 - Create a userSchema & Model
+- Create  POST /signup API to add data to database
+- Push some documents using API calls from postman
+
+- JS object vs JSON (difference)
+- Add the express.json middleware to your app
+- Make your signup API dynamic to receive data from the end user.
+
+- User.findOne with duplicate email ids ,which object returned 
+- API - Get user by email 
+- API - Feed API - GET /feed - get all the users from the database
+- API - Get user by ID
+- Create a delete User API
+- Difference between PATCH and PUT
+- API - Craete a Update User api 
+- Explore the Mongoose Documentation specially for Model API
+- What are options in a Model.findOneAndUpdate method,explore more about it.
+- API - Update the User with email ID
+
+- Explore schematype options from the documention
+- add required ,unique, lowercase , min , minlength, trim
+- Add default
+- Create a custom validate function for gender
+- Improve the DB schema - PUT all appropiate validations on each field in schema
+- Add timestamps to the userSchema
