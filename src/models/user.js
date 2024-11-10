@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const userScheme = new mongoose.Schema({
+
+    userId:{
+        type:String,
+    },
     firstName:{
         type: String,
         uppercase: true,
@@ -31,6 +35,20 @@ const userScheme = new mongoose.Schema({
         lowercase: true,
         unique:true,
         trim:true
+        
+    },
+    photoUrl:{
+        type:String,
+        default:'https://img.freepik.com/premium-photo/stylish-man-flat-vector-profile-picture-ai-generated_606187-310.jpg?w=740'
+
+    },
+    about:{
+        type:String,
+        default:'Its about me',
+        
+    },
+    skills:{
+        type:[String],
         
     },
 },{

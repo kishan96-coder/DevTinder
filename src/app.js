@@ -7,12 +7,16 @@ const app = express();
 app.use(express.json());
 
 app.post("/create-user",async (req,res)=>{
-
+    
+    const data = req.body;
+    
     const user = new User(req.body);
-   
+    
     try{
+        
         await user.save();
         res.send("user saved successfully");
+    
     }catch(err){
         res.status(400).send("there are some errors"+err);
     }
@@ -28,7 +32,6 @@ app.get("/feed",async (req,res)=>{
     }
 
 });
-
 
 app.get("/user",async (req,res)=>{
 
@@ -69,24 +72,34 @@ app.delete("/deleteuser",async (req,res)=>{
 
 app.patch("/updateuser",async (req,res)=>{
 
-    const username=  req.body.firstName;
-    const data = req.body;
 
+  
     try{
-        const userUpdated = await User.findOneAndUpdate({firstName: username},data,{ 
+ 
+        const userId=  req.body.userId;
+        const data = req.body;
+    
+        const AllowedVALUES = ["firstName","lastName"," phoneNumber","skills"];
+
+        const updatedValue = Object.keys(data).every((k) =>
+            AllowedVALUES.includes(k)
+
+        ); 
+        
+        if(!updatedValue){
+
+          throw new Error("Update Not allowed");
+        }
+        const userUpdated = await User.findByIdAndUpdate({_id: userId},data,{ 
             returnDocument: "after",
             runValidators:true
         });
-        res.send(userUpdated);
+        res.send("User updated successfully");
+
     }catch(err){
-        res.status(400).send("there are some errors");
+        res.status(400).send("there are some errors"+err.message);
     }
 });
-
-
-
-
-
 
 require("./config/database")
 
