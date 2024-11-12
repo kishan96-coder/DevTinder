@@ -37,6 +37,10 @@ const userScheme = new mongoose.Schema({
         trim:true
         
     },
+    password:{
+        type:String,
+        required : true
+    },
     photoUrl:{
         type:String,
         default:'https://img.freepik.com/premium-photo/stylish-man-flat-vector-profile-picture-ai-generated_606187-310.jpg?w=740'

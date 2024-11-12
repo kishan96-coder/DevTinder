@@ -1,6 +1,10 @@
 const express = require("express");
 const { connectDB } = require("./config/database");
 const User = require("./models/user");
+const bcrypt = require('bcrypt');
+
+const {signupValidations} = require("./utilis/validations.js");
+const user = require("./models/user");
 
 const app = express();
 
@@ -9,9 +13,18 @@ app.use(express.json());
 app.post("/create-user",async (req,res)=>{
     
     const data = req.body;
-    
-    const user = new User(req.body);
-    
+
+    signupValidations(req);
+
+    const firstName = req.body.firstName;
+    const lastName = req.body.lastName;
+    const emailId = req.body.emailId;
+    const password = req.body.password;
+
+    const passwordhash = await bcrypt.hash( password,10);
+    const user = new User({
+        firstName ,lastName ,emailId ,password:passwordhash
+    });
     try{
         
         await user.save();
@@ -20,6 +33,34 @@ app.post("/create-user",async (req,res)=>{
     }catch(err){
         res.status(400).send("there are some errors"+err);
     }
+});
+
+app.post("/login",async (req,res)=>{
+    try{
+        const {password} = req.body;
+
+        const email = req.body.emailId;
+
+        const user = await User.findOne({emailId:email});
+
+
+        if(!user){
+            throw new Error("Invalid Creditentials");   
+        }
+
+        const isValidPassword =    await bcrypt.compare(password,user.password);
+     
+        if(isValidPassword){
+            res.send("Login Successfully");
+        }
+
+
+    
+    }catch(err)
+    {
+        res.status(400).send("Invalid passowrd or email");
+    }
+
 });
 
 app.get("/feed",async (req,res)=>{
@@ -72,8 +113,6 @@ app.delete("/deleteuser",async (req,res)=>{
 
 app.patch("/updateuser",async (req,res)=>{
 
-
-  
     try{
  
         const userId=  req.body.userId;
