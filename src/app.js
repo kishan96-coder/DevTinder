@@ -5,10 +5,15 @@ const bcrypt = require('bcrypt');
 
 const {signupValidations} = require("./utilis/validations.js");
 const user = require("./models/user");
+const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
+const {userAuth} = require("./middlewares/auth.js");
+
 app.use(express.json());
+app.use(cookieParser());
 
 app.post("/create-user",async (req,res)=>{
     
@@ -21,7 +26,7 @@ app.post("/create-user",async (req,res)=>{
     const emailId = req.body.emailId;
     const password = req.body.password;
 
-    const passwordhash = await bcrypt.hash( password,10);
+    const passwordhash = await bcrypt.hash(password,10);
     const user = new User({
         firstName ,lastName ,emailId ,password:passwordhash
     });
@@ -37,35 +42,34 @@ app.post("/create-user",async (req,res)=>{
 
 app.post("/login",async (req,res)=>{
     try{
-        const {password} = req.body;
-
-        const email = req.body.emailId;
-
-        const user = await User.findOne({emailId:email});
-
-
+        const {password,emailId} = req.body;
+        const user = await User.findOne({emailId: emailId});
         if(!user){
             throw new Error("Invalid Creditentials");   
         }
 
-        const isValidPassword =    await bcrypt.compare(password,user.password);
+        var token = await user.getJwt();
+   
+        res.cookie('token', token);
+       
+        const isValidPassword =  await user.validatePassword(password);
      
         if(isValidPassword){
             res.send("Login Successfully");
         }
 
-
-    
     }catch(err)
     {
-        res.status(400).send("Invalid passowrd or email");
+        res.status(400).send("Invalid passowrd or email"+err);
     }
 
 });
 
-app.get("/feed",async (req,res)=>{
+app.get("/feed",userAuth,async (req,res)=>{
+    console.log(req.user);
+
     try{
-        const users = await User.find({});
+        const users = await user.find({});
         res.send(users);
     }
     catch(err){
@@ -76,11 +80,15 @@ app.get("/feed",async (req,res)=>{
 
 app.get("/user",async (req,res)=>{
 
-    const email = req.body.emailId;
-    const fid = req.body._id;
+  
+    const {token}= req.cookies;
 
+    var decoded = jwt.verify(token,"Kishan@96#");
+    const {emailId}= decoded;
+  
     try{
-       const UserFIND  = await User.findById({_id: fid});
+       const UserFIND  = await User.findOne({emailId:emailId});
+     
         res.send(UserFIND);
     }catch(err){
         res.status(400).send("there are some errors");
